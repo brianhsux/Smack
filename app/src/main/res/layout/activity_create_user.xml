@@ -69,7 +69,7 @@
         app:layout_constraintTop_toBottomOf="@+id/createUserPasswordText" />
 
     <ImageView
-        android:id="@+id/generateUserAvatar"
+        android:id="@+id/createAvatarImageView"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginEnd="8dp"
@@ -98,7 +98,7 @@
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/generateUserAvatar" />
+        app:layout_constraintTop_toBottomOf="@+id/createAvatarImageView" />
 
     <Button
         android:id="@+id/createUserBtn"
