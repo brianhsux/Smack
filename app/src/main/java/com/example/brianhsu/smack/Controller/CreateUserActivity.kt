@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.Toast
 import com.example.brianhsu.smack.R
 import com.example.brianhsu.smack.Services.AuthService
-import com.example.brianhsu.smack.Services.UserDataServices
 import com.example.brianhsu.smack.Utilities.BROADCAST_USER_DATA_CHANGE
 import kotlinx.android.synthetic.main.activity_create_user.*
 import java.util.*
