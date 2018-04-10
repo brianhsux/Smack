@@ -9,8 +9,11 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import com.example.brianhsu.smack.R
 import com.example.brianhsu.smack.Services.AuthService
 import com.example.brianhsu.smack.Services.UserDataServices
@@ -30,6 +33,7 @@ class MainActivity : AppCompatActivity() {
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
+        hideKeyboard()
 
         LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver,
                 IntentFilter(BROADCAST_USER_DATA_CHANGE))
@@ -76,11 +80,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun addChannelBtnClicked(view: View) {
+        if (AuthService.isLoggedIn) {
+            val builder = AlertDialog.Builder(this)
+            val dialogView = layoutInflater.inflate(R.layout.add_channel_dialog, null)
 
+            builder.setView(dialogView)
+                    .setPositiveButton("Add") { dialog, which ->
+                        // perform some logic when clicked
+                        val nameTextField = dialogView.findViewById<EditText>(R.id.addChannelNameTxt)
+                        val descTextFiedl = dialogView.findViewById<EditText>(R.id.addChannelDescTxt)
+                        val channelName = nameTextField.text.toString()
+                        val channelDesc = descTextFiedl.text.toString()
+
+                        // Create channel with the channel name and channel description
+                        hideKeyboard()
+
+                    }
+                    .setNegativeButton("Cancel") { dialog, which ->
+                        // Cancel and close the dialog
+                        hideKeyboard()
+                    }
+                    .show()
+        }
     }
 
     fun sendMessageBtnClicked(view: View) {
 
     }
 
+    fun hideKeyboard() {
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        if (inputManager.isAcceptingText) {
+            inputManager.hideSoftInputFromWindow(currentFocus.windowToken, 0)
+        }
+    }
 }
