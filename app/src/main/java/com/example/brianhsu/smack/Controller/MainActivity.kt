@@ -18,11 +18,15 @@ import com.example.brianhsu.smack.R
 import com.example.brianhsu.smack.Services.AuthService
 import com.example.brianhsu.smack.Services.UserDataServices
 import com.example.brianhsu.smack.Utilities.BROADCAST_USER_DATA_CHANGE
+import com.example.brianhsu.smack.Utilities.SOCKET_URL
+import io.socket.client.IO
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    val socket = IO.socket(SOCKET_URL)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +37,20 @@ class MainActivity : AppCompatActivity() {
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
-        hideKeyboard()
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver,
                 IntentFilter(BROADCAST_USER_DATA_CHANGE))
+        socket.connect()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(userDataChangeReceiver)
+        socket.disconnect()
     }
 
     private val userDataChangeReceiver = object: BroadcastReceiver() {
@@ -93,12 +107,11 @@ class MainActivity : AppCompatActivity() {
                         val channelDesc = descTextFiedl.text.toString()
 
                         // Create channel with the channel name and channel description
-                        hideKeyboard()
+                        socket.emit("newChannel", channelName, channelDesc)
 
                     }
                     .setNegativeButton("Cancel") { dialog, which ->
                         // Cancel and close the dialog
-                        hideKeyboard()
                     }
                     .show()
         }
@@ -106,13 +119,5 @@ class MainActivity : AppCompatActivity() {
 
     fun sendMessageBtnClicked(view: View) {
 
-    }
-
-    fun hideKeyboard() {
-        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-        if (inputManager.isAcceptingText) {
-            inputManager.hideSoftInputFromWindow(currentFocus.windowToken, 0)
-        }
     }
 }
