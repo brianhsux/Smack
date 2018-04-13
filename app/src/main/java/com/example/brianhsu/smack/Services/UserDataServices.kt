@@ -7,6 +7,7 @@ import java.util.*
 /**
  * Created by brian on 2018/3/27.
  */
+
 object UserDataServices {
 
     var id = ""
