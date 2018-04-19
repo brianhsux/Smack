@@ -7,5 +7,3 @@ class Message(val message: String, val userName: String, val channedId: String,
               val userAvatar: String, val userAvatarColor: String, val id: String, val timeStamp: String) {
 
 }
-
-// msg.messageBody, msg.userId, msg.channelId, msg.userName, msg.userAvatar, msg.userAvatarColor, msg.id, msg.timeStamp
